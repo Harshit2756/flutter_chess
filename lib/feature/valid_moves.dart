@@ -231,7 +231,7 @@ List<List<int>> calculateRealValidMoves(
     for (var move in candidateMoves) {
       int endRow = move[0];
       int endCol = move[1];
-      if (simulatedMiveIsSafe(piece!, row, col, endRow, endCol, board,
+      if (simulatedMoveIsSafe(piece!, row, col, endRow, endCol, board,
           whiteKingPosition, blackKingPosition)) {
         realValidMoves.add(move);
       }
@@ -243,7 +243,7 @@ List<List<int>> calculateRealValidMoves(
 }
 
 // simulate the move and see if the king is in check
-bool simulatedMiveIsSafe(
+bool simulatedMoveIsSafe(
     ChessPiece piece,
     int startrow,
     int startcol,

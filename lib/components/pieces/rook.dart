@@ -6,23 +6,23 @@ class Rook {
     newBoard[0][0] = ChessPiece(
       ChessPieceType.rook,
       false,
-      'assets/Images/Rook_48.png',
+      'assets/Images/black/rook.png',
     );
     newBoard[0][7] = ChessPiece(
       ChessPieceType.rook,
       false,
-      'assets/Images/Rook_48.png',
+      'assets/Images/black/rook.png',
     );
     // ~ Add the white rooks
     newBoard[7][0] = ChessPiece(
       ChessPieceType.rook,
       true,
-      'assets/Images/Rook_48.png',
+      'assets/Images/white/rook.png',
     );
     newBoard[7][7] = ChessPiece(
       ChessPieceType.rook,
       true,
-      'assets/Images/Rook_48.png',
+      'assets/Images/white/rook.png',
     );
   }
 

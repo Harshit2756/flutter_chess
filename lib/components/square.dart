@@ -37,9 +37,9 @@ class Square extends StatelessWidget {
         child: piece != null
             ? Image.asset(
                 piece!.imagePath,
-                color: piece!.isWhite
-                    ? const Color.fromARGB(255, 255, 255, 255)
-                    : const Color.fromARGB(255, 0, 0, 0),
+                // color: piece!.isWhite
+                //     ? const Color.fromARGB(255, 255, 255, 255)
+                //     : const Color.fromARGB(255, 0, 0, 0),
               )
             : null,
       ),

@@ -6,13 +6,13 @@ class King {
     newBoard[0][4] = ChessPiece(
       ChessPieceType.king,
       false,
-      'assets/Images/King_48.png',
+      'assets/Images/black/king.png',
     );
     // ~ Add the white king
     newBoard[7][4] = ChessPiece(
       ChessPieceType.king,
       true,
-      'assets/Images/King_48.png',
+      'assets/Images/white/king.png',
     );
   }
 

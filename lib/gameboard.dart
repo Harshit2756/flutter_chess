@@ -167,26 +167,13 @@ class _GameBoardState extends State<GameBoard> {
     return Scaffold(
       backgroundColor: backgroundColor,
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // ~ Captured Pieces by Black
-          Expanded(
-            child: GridView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: blackCapturedPieces.length,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 8),
-              itemBuilder: (context, index) => DeadPiece(
-                imagePath: blackCapturedPieces[index].imagePath,
-                isWhite: blackCapturedPieces[index].isWhite,
-              ),
-            ),
-          ),
-
           // ~ Turn Indicator and reset button
           Container(
-            width: double.infinity,
             height: 50,
-            color: Colors.transparent,
+            width: 200,
+            color: borderColor,
             child: Center(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -216,47 +203,69 @@ class _GameBoardState extends State<GameBoard> {
             ),
           ),
 
-          // ~ Chessboard
-          Expanded(
-            flex: 3,
-            child: GridView.builder(
+          // ~ Captured Pieces by Black
+          SizedBox(
+            height: 35,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: 8 * 8,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 8),
-              itemBuilder: (context, index) {
-                int row = index ~/ 8;
-                int col = index % 8;
+              itemCount: blackCapturedPieces.length,
+              itemBuilder: (context, index) => DeadPiece(
+                imagePath: blackCapturedPieces[index].imagePath,
+                isWhite: blackCapturedPieces[index].isWhite,
+              ),
+            ),
+          ),
+          // ~ Chessboard
+          Container(
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: borderColor,
+                width: 5.0,
+              ),
+            ),
+            child: AspectRatio(
+              aspectRatio: 1,
+              child: GridView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: 8 * 8,
+                padding: const EdgeInsets.all(0),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisSpacing: 0, mainAxisSpacing: 0, crossAxisCount: 8),
+                itemBuilder: (context, index) {
+                  int row = index ~/ 8;
+                  int col = index % 8;
 
-                //  check if this square is selected
-                bool isSelected = (selectedRow == row && selectedCol == col);
+                  //  check if this square is selected
+                  bool isSelected = (selectedRow == row && selectedCol == col);
 
-                // check if this square is a valid move
-                bool isValidMove = false;
-                for (var move in validMoves) {
-                  if (move[0] == row && move[1] == col) {
-                    isValidMove = true;
-                    break;
+                  // check if this square is a valid move
+                  bool isValidMove = false;
+                  for (var move in validMoves) {
+                    if (move[0] == row && move[1] == col) {
+                      isValidMove = true;
+                      break;
+                    }
                   }
-                }
-                return Square(
-                  isWhite: isWhite(index),
-                  piece: board[row][col],
-                  isSelected: isSelected,
-                  onTap: () => pieceSelected(row, col),
-                  isValidMove: isValidMove,
-                );
-              },
+                  return Square(
+                    isWhite: isWhite(index),
+                    piece: board[row][col],
+                    isSelected: isSelected,
+                    onTap: () => pieceSelected(row, col),
+                    isValidMove: isValidMove,
+                  );
+                },
+              ),
             ),
           ),
 
           // ~ Captured Pieces by White
-          Expanded(
-            child: GridView.builder(
+          SizedBox(
+            height: 25,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
               physics: const NeverScrollableScrollPhysics(),
               itemCount: whiteCapturedPieces.length,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 8),
               itemBuilder: (context, index) => DeadPiece(
                 imagePath: whiteCapturedPieces[index].imagePath,
                 isWhite: whiteCapturedPieces[index].isWhite,

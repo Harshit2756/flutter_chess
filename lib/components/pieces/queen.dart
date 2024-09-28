@@ -6,13 +6,13 @@ class Queen {
     newBoard[0][3] = ChessPiece(
       ChessPieceType.queen,
       false,
-      'assets/Images/Queen_48.png',
+      'assets/Images/black/queen.png',
     );
     // ~ Add the white queen
     newBoard[7][3] = ChessPiece(
       ChessPieceType.queen,
       true,
-      'assets/Images/Queen_48.png',
+      'assets/Images/white/queen.png',
     );
   }
 

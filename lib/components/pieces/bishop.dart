@@ -6,23 +6,23 @@ class Bishop {
     newBoard[0][2] = ChessPiece(
       ChessPieceType.bishop,
       false,
-      'assets/Images/Bishop_48.png',
+      'assets/Images/black/bishop.png',
     );
     newBoard[0][5] = ChessPiece(
       ChessPieceType.bishop,
       false,
-      'assets/Images/Bishop_48.png',
+      'assets/Images/black/bishop.png',
     );
     // ~ Add the white bishops
     newBoard[7][2] = ChessPiece(
       ChessPieceType.bishop,
       true,
-      'assets/Images/Bishop_48.png',
+      'assets/Images/white/bishop.png',
     );
     newBoard[7][5] = ChessPiece(
       ChessPieceType.bishop,
       true,
-      'assets/Images/Bishop_48.png',
+      'assets/Images/white/bishop.png',
     );
   }
 

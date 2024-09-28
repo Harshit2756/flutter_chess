@@ -1,26 +1,31 @@
 import 'package:chess/components/piece.dart';
 import 'package:chess/feature/helper_methods.dart';
 
-class Pawn{
-  void initialPosition(List<List<ChessPiece?>> newBoard){
+class Pawn {
+  void initialPosition(List<List<ChessPiece?>> newBoard) {
     for (var i = 0; i < 8; i++) {
       // ~Add the black pawns
       newBoard[1][i] = ChessPiece(
         ChessPieceType.pawn,
         false,
-        'assets/Images/Pawn_48.png',
+        'assets/Images/black/pawn.png',
       );
       // ~Add the white pawns
       newBoard[6][i] = ChessPiece(
         ChessPieceType.pawn,
         true,
-        'assets/Images/Pawn_48.png',
+        'assets/Images/white/pawn.png',
       );
     }
   }
 
-  void validMoves(int row, int col, ChessPiece selectedPiece,
-      List<List<ChessPiece?>> board, int direction, List<List<int>> candidateMoves){
+  void validMoves(
+      int row,
+      int col,
+      ChessPiece selectedPiece,
+      List<List<ChessPiece?>> board,
+      int direction,
+      List<List<int>> candidateMoves) {
     // 1 square forward if the square is empty
     if (isInBoard(row + direction, col) &&
         board[row + direction][col] == null) {
