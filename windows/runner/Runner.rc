@@ -93,7 +93,7 @@ BEGIN
             VALUE "FileDescription", "chess" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
             VALUE "InternalName", "chess" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2023 com.example. All rights reserved." "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2024 com.example. All rights reserved." "\0"
             VALUE "OriginalFilename", "chess.exe" "\0"
             VALUE "ProductName", "chess" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
