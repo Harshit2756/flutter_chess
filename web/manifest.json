@@ -1,11 +1,11 @@
 {
-    "name": "chess",
-    "short_name": "chess",
+    "name": "Chess",
+    "short_name": "Chess",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "This is a fully functional chess game built with Flutter, where users can play against each other.It provides an enjoyable and visually appealing experience across multiple platforms like Android, iOS.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
