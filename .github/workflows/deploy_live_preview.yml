@@ -1,3 +1,5 @@
+# This is an updated version of the previous code that fixes the issues
+
 name: Deploy Live Preview to GitHub Pages
 
 on:
@@ -11,18 +13,27 @@ jobs:
 
     steps:
       # Step 1: Checkout the code from master
-      - name: Checkout code
+      - name: Checkout code from master
         uses: actions/checkout@v3
         with:
           ref: master
 
-      # Step 2: Pull master to live_preview branch
-      - name: Pull master to live_preview branch
+      # Step 2: Fetch and switch to live_preview branch and merge master
+      - name: Switch to live_preview branch and merge master
         run: |
           git config --global user.email "khandelwalharshit431@gmail.com"
           git config --global user.name "Harshit2756"
-          git checkout -b live_preview origin/live_preview || git checkout live_preview
+          
+          # Fetch the remote branches, including live_preview
+          git fetch origin
+
+          # Checkout the live_preview branch from remote
+          git checkout live_preview
+
+          # Merge master into live_preview
           git merge master
+
+          # Push the merged changes back to the live_preview branch
           git push origin live_preview
 
       # Step 3: Replace main.dart with Device Preview code
