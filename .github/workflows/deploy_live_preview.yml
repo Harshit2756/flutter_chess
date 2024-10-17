@@ -16,22 +16,37 @@ jobs:
         with:
           ref: master
 
-      # Step 2: Fetch and switch to live_preview branch and merge master
-      - name: Switch to live_preview branch and merge master
+      # Step 2: Fetch live_preview branch and forcefully reset to master
+      - name: Force reset live_preview branch to master
         run: |
           git config --global user.email "khandelwalharshit431@gmail.com"
           git config --global user.name "Harshit2756"
           
-          # Fetch the remote branches, including live_preview
-          git fetch origin
+          # Fetch the live_preview branch
+          git fetch origin live_preview
 
-          # Checkout the live_preview branch from remote
+          # Check out the live_preview branch
           git checkout live_preview
 
-          # Merge master into live_preview, allowing unrelated histories
-          git merge master --allow-unrelated-histories
+          # Reset live_preview to match master
+          git reset --hard master
 
-      # Step 3: Replace main.dart with Device Preview code using PowerShell
+          # Force push the changes to live_preview, overwriting it
+          git push --force https://$GITHUB_ACTOR:${{ secrets.PAT_TOKEN }}@github.com/Harshit2756/flutter_chess live_preview
+
+      # Step 3: Set up Flutter environment (before running flutter commands)
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.24.3"
+
+      # Step 4: Add `device_preview` and `device_preview_screenshot` packages to pubspec.yaml
+      - name: Add device_preview and device_preview_screenshot packages
+        run: |
+          flutter pub add device_preview
+          flutter pub add device_preview_screenshot
+
+      # Step 5: Replace main.dart with Device Preview code using PowerShell
       - name: Replace main.dart with Device Preview code
         run: |
           Set-Content lib/main.dart @"
@@ -39,7 +54,7 @@ jobs:
           import 'package:chess/values/colors.dart';
           import 'package:device_preview/device_preview.dart';
           import 'package:device_preview_screenshot/device_preview_screenshot.dart';
-          import 'package:flutter/material.dart';
+          import 'package:flutter/material.dart;
 
           Future<void> main() async {
             runApp(
@@ -95,21 +110,15 @@ jobs:
           }
           "@
 
-      # Step 4: Set up Flutter environment
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: "3.24.3"
-
-      # Step 5: Install Flutter dependencies
+      # Step 6: Install Flutter dependencies
       - name: Install Flutter dependencies
         run: flutter pub get
 
-      # Step 6: Build Flutter web app
+      # Step 7: Build Flutter web app
       - name: Build Flutter for web
         run: flutter build web --release --web-renderer canvaskit
 
-      # Step 7: Deploy to GitHub Pages using the docs folder
+      # Step 8: Deploy to GitHub Pages using the docs folder
       - name: Deploy to GitHub Pages
         run: |
           Remove-Item -Recurse -Force docs
