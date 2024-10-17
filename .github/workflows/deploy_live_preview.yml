@@ -1,5 +1,3 @@
-# This is an updated version of the previous code that fixes the issues
-
 name: Deploy Live Preview to GitHub Pages
 
 on:
@@ -30,17 +28,13 @@ jobs:
           # Checkout the live_preview branch from remote
           git checkout live_preview
 
-          # Merge master into live_preview
-           git merge master --allow-unrelated-histories
+          # Merge master into live_preview, allowing unrelated histories
+          git merge master --allow-unrelated-histories || exit 0
 
-          # Push the merged changes back to the live_preview branch
-          git push https://$GITHUB_ACTOR:${{ secrets.PAT_TOKEN }}@github.com/Harshit2756/flutter_chess live_preview
-
-
-      # Step 3: Replace main.dart with Device Preview code
+      # Step 3: Replace main.dart with Device Preview code using PowerShell
       - name: Replace main.dart with Device Preview code
         run: |
-          cat > lib/main.dart << 'EOF'
+          Set-Content lib/main.dart @"
           import 'package:chess/gameboard.dart';
           import 'package:chess/values/colors.dart';
           import 'package:device_preview/device_preview.dart';
@@ -99,7 +93,7 @@ jobs:
               );
             }
           }
-          EOF
+          "@
 
       # Step 4: Set up Flutter environment
       - name: Set up Flutter
@@ -122,4 +116,4 @@ jobs:
           mv build/web docs
           git add docs
           git commit -m "Deploy live preview build to GitHub Pages"
-          git push origin live_preview
+          git push https://$GITHUB_ACTOR:${{ secrets.PAT_TOKEN }}@github.com/Harshit2756/flutter_chess live_preview
