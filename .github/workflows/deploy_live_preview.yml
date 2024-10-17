@@ -29,7 +29,7 @@ jobs:
           git checkout live_preview
 
           # Merge master into live_preview, allowing unrelated histories
-          git merge master --allow-unrelated-histories || exit 0
+          git merge master --allow-unrelated-histories
 
       # Step 3: Replace main.dart with Device Preview code using PowerShell
       - name: Replace main.dart with Device Preview code
