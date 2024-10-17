@@ -34,7 +34,7 @@ jobs:
            git merge master --allow-unrelated-histories
 
           # Push the merged changes back to the live_preview branch
-          git push origin live_preview
+          git push https://$GITHUB_ACTOR:${{ secrets.PAT_TOKEN }}@github.com/${{ github.repository }} live_preview
 
       # Step 3: Replace main.dart with Device Preview code
       - name: Replace main.dart with Device Preview code
