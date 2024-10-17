@@ -31,7 +31,7 @@ jobs:
           git checkout live_preview
 
           # Merge master into live_preview
-          git merge master
+           git merge master --allow-unrelated-histories
 
           # Push the merged changes back to the live_preview branch
           git push origin live_preview
