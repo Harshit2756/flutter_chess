@@ -6,6 +6,7 @@
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
     "description": "This is a fully functional chess game built with Flutter, where users can play against each other.It provides an enjoyable and visually appealing experience across multiple platforms like Android, iOS.",
+
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
