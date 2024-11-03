@@ -2,7 +2,7 @@ name: Flutter Web Preview Build
 
 on:
   push:
-    branches: [main]
+    branches: [master]
 permissions:
   contents: write
 
@@ -15,13 +15,13 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0 # Fetch all history
 
-      - name: Reset live_preview branch to main
+      - name: Reset live_preview branch to master
         run: |
           # Create or checkout live_preview branch
           git checkout live_preview 2>/dev/null || git checkout -b live_preview
-          # Force reset to main branch state
-          git fetch origin main
-          git reset --hard origin/main
+          # Force reset to master branch state
+          git fetch origin master
+          git reset --hard origin/master
           # Force push to update live_preview branch
           git push -f origin live_preview
 
@@ -118,7 +118,7 @@ jobs:
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           # Stage all changes
-          git add docs lib/main.dart lib/app.dart
+          git add docs lib/main.dart
           git commit -m "Update web preview build" || echo "No changes to commit"
           # Force push to ensure clean state
           git push -f origin live_preview
