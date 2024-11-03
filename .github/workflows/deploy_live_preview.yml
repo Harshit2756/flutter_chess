@@ -1,55 +1,47 @@
-name: Deploy Live Preview to GitHub Pages
+name: Flutter Web Preview Build
 
 on:
   push:
-    branches:
-      - master
+    branches: [main]
+permissions:
+  contents: write
 
 jobs:
-  deploy:
-    runs-on: windows-latest
-
+  build:
+    runs-on: ubuntu-latest
     steps:
-      # Step 1: Checkout the code from master
-      - name: Checkout code from master
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
-          ref: master
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0 # Fetch all history
 
-      # Step 2: Fetch live_preview branch and forcefully reset to master
-      - name: Force reset live_preview branch to master
+      - name: Reset live_preview branch to main
         run: |
-          git config --global user.email "khandelwalharshit431@gmail.com"
-          git config --global user.name "Harshit2756"
-          
-          # Fetch the live_preview branch
-          git fetch origin live_preview
+          # Create or checkout live_preview branch
+          git checkout live_preview 2>/dev/null || git checkout -b live_preview
+          # Force reset to main branch state
+          git fetch origin main
+          git reset --hard origin/main
+          # Force push to update live_preview branch
+          git push -f origin live_preview
 
-          # Check out the live_preview branch
-          git checkout live_preview
-
-          # Reset live_preview to match master
-          git reset --hard master
-
-          # Force push the changes to live_preview, overwriting it
-          git push --force https://$GITHUB_ACTOR:${{ secrets.PAT_TOKEN }}@github.com/Harshit2756/flutter_chess live_preview
-
-      # Step 3: Set up Flutter environment (before running flutter commands)
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.24.3"
+          flutter-version: "3.24.4"
+          channel: "stable"
 
-      # Step 4: Add `device_preview` and `device_preview_screenshot` packages to pubspec.yaml
-      - name: Add device_preview and device_preview_screenshot packages
+      - name: Install dependencies
         run: |
+          flutter pub get
           flutter pub add device_preview
           flutter pub add device_preview_screenshot
+          flutter pub get
 
-      # Step 5: Replace main.dart with Device Preview code using PowerShell
-      - name: Replace main.dart with Device Preview code
+      - name: Update main.dart for preview
         run: |
-          Set-Content lib/main.dart @"
+          # Ensure we're creating a fresh main.dart
+          cat > lib/main.dart << 'EOL'
           import 'package:chess/gameboard.dart';
           import 'package:chess/values/colors.dart';
           import 'package:device_preview/device_preview.dart';
@@ -108,21 +100,25 @@ jobs:
               );
             }
           }
-          "@
+          EOL
 
-      # Step 6: Install Flutter dependencies
-      - name: Install Flutter dependencies
-        run: flutter pub get
+      - name: Build Web
+        run: flutter build web --base-href "/flutter_chess/"
 
-      # Step 7: Build Flutter web app
-      - name: Build Flutter for web
-        run: flutter build web --release --web-renderer canvaskit
-
-      # Step 8: Deploy to GitHub Pages using the docs folder
-      - name: Deploy to GitHub Pages
+      - name: Update docs directory
         run: |
-          Remove-Item -Recurse -Force docs
-          mv build/web docs
-          git add docs
-          git commit -m "Deploy live preview build to GitHub Pages"
-          git push https://$GITHUB_ACTOR:${{ secrets.PAT_TOKEN }}@github.com/Harshit2756/flutter_chess live_preview
+          # Remove old docs and create new one
+          rm -rf docs
+          mkdir -p docs
+          # Copy web build to docs
+          cp -r build/web/. docs/
+
+      - name: Commit and push preview changes
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          # Stage all changes
+          git add docs lib/main.dart lib/app.dart
+          git commit -m "Update web preview build" || echo "No changes to commit"
+          # Force push to ensure clean state
+          git push -f origin live_preview
