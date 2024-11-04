@@ -1,12 +1,3 @@
-enum ChessPieceType {
-  pawn,
-  rook,
-  knight,
-  bishop,
-  queen,
-  king,
-}
-
 class ChessPiece {
   final ChessPieceType type;
   final bool isWhite;
@@ -17,4 +8,13 @@ class ChessPiece {
     this.isWhite,
     this.imagePath,
   );
+}
+
+enum ChessPieceType {
+  pawn,
+  rook,
+  knight,
+  bishop,
+  queen,
+  king,
 }

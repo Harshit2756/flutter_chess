@@ -1,9 +1,9 @@
 import 'package:chess/components/dead_piece.dart';
 import 'package:chess/components/piece.dart';
 import 'package:chess/components/square.dart';
+import 'package:chess/feature/helper_methods.dart';
 import 'package:chess/feature/initial_board.dart';
 import 'package:chess/feature/valid_moves.dart';
-import 'package:chess/feature/helper_methods.dart';
 import 'package:chess/values/colors.dart';
 import 'package:flutter/material.dart';
 
@@ -43,124 +43,6 @@ class _GameBoardState extends State<GameBoard> {
   List<int> whiteKingPosition = [7, 4];
   List<int> blackKingPosition = [0, 4];
   bool isCheck = false;
-
-  // Initialize the board
-  @override
-  void initState() {
-    super.initState();
-    //  Initialize the board
-    board = initialBoard();
-  }
-
-  // User selected a piece
-  void pieceSelected(int row, int col) {
-    setState(() {
-      //  no piece is selected, this is the first tap
-      if (board[row][col] != null && selectedPiece == null) {
-        if (board[row][col]!.isWhite == isWhiteTurn) {
-          selectedPiece = board[row][col];
-          selectedRow = row;
-          selectedCol = col;
-        }
-      }
-
-      // there is a pice selected and the user tapped on another piece of the same color
-      else if (board[row][col] != null &&
-          board[row][col]!.isWhite == selectedPiece!.isWhite) {
-        selectedPiece = board[row][col];
-        selectedRow = row;
-        selectedCol = col;
-      }
-
-      // if there is a selected piece and the user tapped on a square that is a valid move
-      else if (selectedPiece != null &&
-          validMoves.any((element) => element[0] == row && element[1] == col)) {
-        movePiece(row, col);
-      }
-
-      // if a peice is selected ,calculate the valid moves
-      if (selectedPiece != null) {
-        validMoves = calculateRealValidMoves(selectedRow, selectedCol,
-            selectedPiece!, true, board, whiteKingPosition, blackKingPosition);
-      }
-    });
-  }
-
-  // Move Piece
-  void movePiece(int newRow, int newCol) {
-    //  check if the move is a capture
-    if (board[newRow][newCol] != null) {
-      //  check if the piece is white or black
-      if (board[newRow][newCol]!.isWhite) {
-        whiteCapturedPieces.add(board[newRow][newCol]!);
-      } else {
-        blackCapturedPieces.add(board[newRow][newCol]!);
-      }
-    }
-
-    // check if the piece being moved is a king
-    if (selectedPiece!.type == ChessPieceType.king) {
-      //  update the king's position
-      if (selectedPiece!.isWhite) {
-        whiteKingPosition = [newRow, newCol];
-      } else {
-        blackKingPosition = [newRow, newCol];
-      }
-    }
-
-    //  move the piece to the new square
-    board[newRow][newCol] = selectedPiece;
-    board[selectedRow][selectedCol] = null;
-
-    // see if the king is in check
-    if (isKingInCheck(
-        !isWhiteTurn, board, whiteKingPosition, blackKingPosition)) {
-      isCheck = true;
-    } else {
-      isCheck = false;
-    }
-
-    //  reset the selected piece
-    setState(() {
-      selectedPiece = null;
-      selectedRow = -1;
-      selectedCol = -1;
-      validMoves = [];
-    });
-
-    // Check if it's checkmate
-    if (isCheckMate(
-        !isWhiteTurn, board, whiteKingPosition, blackKingPosition)) {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Text('CHECK MATE!'),
-          actions: [
-            TextButton(
-              onPressed: resetGame,
-              child: const Text('Play Again'),
-            ),
-          ],
-        ),
-      );
-    }
-
-    //  change the turn
-    isWhiteTurn = !isWhiteTurn;
-  }
-
-  // RESET TO NEW GAME
-  void resetGame() {
-    Navigator.pop(context);
-    board = initialBoard();
-    isCheck = false;
-    isWhiteTurn = true;
-    whiteCapturedPieces.clear();
-    blackCapturedPieces.clear();
-    whiteKingPosition = [7, 4];
-    blackKingPosition = [0, 4];
-    setState(() {});
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -275,5 +157,123 @@ class _GameBoardState extends State<GameBoard> {
         ],
       ),
     );
+  }
+
+  // Initialize the board
+  @override
+  void initState() {
+    super.initState();
+    //  Initialize the board
+    board = initialBoard();
+  }
+
+  // Move Piece
+  void movePiece(int newRow, int newCol) {
+    //  check if the move is a capture
+    if (board[newRow][newCol] != null) {
+      //  check if the piece is white or black
+      if (board[newRow][newCol]!.isWhite) {
+        whiteCapturedPieces.add(board[newRow][newCol]!);
+      } else {
+        blackCapturedPieces.add(board[newRow][newCol]!);
+      }
+    }
+
+    // check if the piece being moved is a king
+    if (selectedPiece!.type == ChessPieceType.king) {
+      //  update the king's position
+      if (selectedPiece!.isWhite) {
+        whiteKingPosition = [newRow, newCol];
+      } else {
+        blackKingPosition = [newRow, newCol];
+      }
+    }
+
+    //  move the piece to the new square
+    board[newRow][newCol] = selectedPiece;
+    board[selectedRow][selectedCol] = null;
+
+    // see if the king is in check
+    if (isKingInCheck(
+        !isWhiteTurn, board, whiteKingPosition, blackKingPosition)) {
+      isCheck = true;
+    } else {
+      isCheck = false;
+    }
+
+    //  reset the selected piece
+    setState(() {
+      selectedPiece = null;
+      selectedRow = -1;
+      selectedCol = -1;
+      validMoves = [];
+    });
+
+    // Check if it's checkmate
+    if (isCheckMate(
+        !isWhiteTurn, board, whiteKingPosition, blackKingPosition)) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('CHECK MATE!'),
+          actions: [
+            TextButton(
+              onPressed: resetGame,
+              child: const Text('Play Again'),
+            ),
+          ],
+        ),
+      );
+    }
+
+    //  change the turn
+    isWhiteTurn = !isWhiteTurn;
+  }
+
+  // User selected a piece
+  void pieceSelected(int row, int col) {
+    setState(() {
+      //  no piece is selected, this is the first tap
+      if (board[row][col] != null && selectedPiece == null) {
+        if (board[row][col]!.isWhite == isWhiteTurn) {
+          selectedPiece = board[row][col];
+          selectedRow = row;
+          selectedCol = col;
+        }
+      }
+
+      // there is a pice selected and the user tapped on another piece of the same color
+      else if (board[row][col] != null &&
+          board[row][col]!.isWhite == selectedPiece!.isWhite) {
+        selectedPiece = board[row][col];
+        selectedRow = row;
+        selectedCol = col;
+      }
+
+      // if there is a selected piece and the user tapped on a square that is a valid move
+      else if (selectedPiece != null &&
+          validMoves.any((element) => element[0] == row && element[1] == col)) {
+        movePiece(row, col);
+      }
+
+      // if a peice is selected ,calculate the valid moves
+      if (selectedPiece != null) {
+        validMoves = calculateRealValidMoves(selectedRow, selectedCol,
+            selectedPiece!, true, board, whiteKingPosition, blackKingPosition);
+      }
+    });
+  }
+
+  // RESET TO NEW GAME
+  void resetGame() {
+    Navigator.pop(context);
+    board = initialBoard();
+    isCheck = false;
+    isWhiteTurn = true;
+    whiteCapturedPieces.clear();
+    blackCapturedPieces.clear();
+    whiteKingPosition = [7, 4];
+    blackKingPosition = [0, 4];
+    setState(() {});
   }
 }
