@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <!--
     If you are serving your web app in a path other than the root, change the
@@ -18,7 +19,8 @@
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="This is a fully functional chess game built with Flutter, where users can play against each other.It provides an enjoyable and visually appealing experience across multiple platforms like Android, iOS.">
+  <meta name="description"
+    content="This is a fully functional chess game built with Flutter, where users can play against each other.It provides an enjoyable and visually appealing experience across multiple platforms like Android, iOS.">
 
   <!-- iOS meta tags & icons -->
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -27,8 +29,8 @@
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
   <!-- Favicon -->
-  <link rel="Shortcut-icon" type="image/x-icon" href="favicon.ico"/>
-  <link rel="icon" type="image/x-icon" href="favicon.ico"/>
+  <link rel="Shortcut-icon" type="image/x-icon" href="favicon.ico" />
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
 
   <title>Chess</title>
   <link rel="manifest" href="manifest.json">
@@ -40,21 +42,9 @@
   <!-- This script adds the flutter initialization JS code -->
   <script src="flutter.js" defer></script>
 </head>
+
 <body>
-  <script>
-    window.addEventListener('load', function(ev) {
-      // Download main.dart.js
-      _flutter.loader.loadEntrypoint({
-        serviceWorker: {
-          serviceWorkerVersion: serviceWorkerVersion,
-        },
-        onEntrypointLoaded: function(engineInitializer) {
-          engineInitializer.initializeEngine().then(function(appRunner) {
-            appRunner.runApp();
-          });
-        }
-      });
-    });
-  </script>
+  <script src="flutter_bootstrap.js" async></script>
 </body>
+
 </html>
