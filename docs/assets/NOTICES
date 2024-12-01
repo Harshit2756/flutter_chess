@@ -5905,6 +5905,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 --------------------------------------------------------------------------------
 device_preview
+device_preview_screenshot
 
 MIT License
 
@@ -7684,6 +7685,9 @@ SOFTWARE.
 
 --------------------------------------------------------------------------------
 flutter_lints
+path_provider
+path_provider_android
+path_provider_foundation
 path_provider_linux
 path_provider_platform_interface
 path_provider_windows
